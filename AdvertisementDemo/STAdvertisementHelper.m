@@ -44,7 +44,11 @@ static NSString *const adDetailUrl = @"STADDetailUrl";
     }
     
     // 2.无论沙盒中是否存在广告图片，都需要重新调用广告接口，判断广告是否更新
-    [[STAdvertisementHelper st_shareInstance] getAdvertisingImage];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [[STAdvertisementHelper st_shareInstance] getAdvertisingImage];
+    });
+    
 
 }
 + (UIView *)configureLaunchImageAnimation{
@@ -145,8 +149,8 @@ static NSString *const adDetailUrl = @"STADDetailUrl";
  */
 - (void)downloadAdImageWithUrl:(NSString *)imageUrl imageName:(NSString *)imageName
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    
         NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
         UIImage *image = [UIImage imageWithData:data];
         
@@ -163,7 +167,7 @@ static NSString *const adDetailUrl = @"STADDetailUrl";
             [self deleteOldImage];
         }
         
-    });
+//    });
 }
 
 /**
